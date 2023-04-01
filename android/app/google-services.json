@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "533876576717",
+    "project_id": "connecta-1459a",
+    "storage_bucket": "connecta-1459a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533876576717:android:03e0fce635cda6ea8ff484",
+        "android_client_info": {
+          "package_name": "com.example.connecta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533876576717-cds68iq6glvo30oiuqubavci3mtfsl29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWfET9CggGRHKsdwJx1bpJXLZs8cHV8jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533876576717-cds68iq6glvo30oiuqubavci3mtfsl29.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
