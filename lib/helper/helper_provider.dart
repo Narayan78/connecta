@@ -14,7 +14,7 @@ class LoginProvider extends StateNotifier<bool> {
   }
 }
 
-final passwordHide = StateProvider<bool>((ref) => true);
+final passHide = StateProvider.autoDispose<bool>((ref) =>true );
 
 final imageProvider = StateNotifierProvider.autoDispose<ImageProvider, XFile?>(
     (ref) => ImageProvider(null));
