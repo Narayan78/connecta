@@ -1,7 +1,14 @@
+import 'package:connecta/firebase_instances.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/common_state.dart';
 import '../service/auth_service.dart';
+
+
+
+
+
+final userStream = StreamProvider((ref) => ref.read(auth).authStateChanges());
 
 final authProvider = StateNotifierProvider<AuthProvider, CommonState>(
   (ref) => AuthProvider(
@@ -60,7 +67,6 @@ class AuthProvider extends StateNotifier<CommonState> {
           isLoad: false, isError: false, isSuccess: r, errText: '');
     });
   }
-
 
   Future<void> logOut() async {
     state = state.copyWith(

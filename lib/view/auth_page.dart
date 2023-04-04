@@ -235,12 +235,13 @@ class AuthPage extends ConsumerWidget {
                           : () {
                               FocusScope.of(context).unfocus();
                               _formKey.currentState!.save();
-                              print('hello');
+                   
                               if (_formKey.currentState!.validate()) {
                                 if (isLogin) {
                                   ref.read(authProvider.notifier).userLogin(
                                       email: emailController.text.trim(),
                                       password: passwordController.text.trim());
+                                    
                                 } else if (image == null) {
                                   SnackShow.showError('Please select an image');
                                 } else {

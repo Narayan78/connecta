@@ -19,7 +19,7 @@ class SnackShow {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       backgroundColor: Colors.green,
-      textColor: Colors.green,
+      textColor: Colors.white,
       fontSize: 16,
     );
   }

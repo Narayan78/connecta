@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,6 +11,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../firebase_instances.dart';
 
+// final usersStream =
+//     StreamProvider.autoDispose((ref) => ref.read(chatCore).users());
+// final singleUser =
+//     StreamProvider.family((ref, String id) => AuthService.getUser(id));
 
 final authServiceProvider = Provider((ref) => AuthService(
     auth: ref.watch(auth),
@@ -29,6 +34,21 @@ class AuthService {
     required this.messaging,
     required this.storage,
   });
+
+  static final userDb = FirebaseFirestore.instance.collection('users');
+  static Stream<types.User> getUser(String userId) {
+    return userDb.doc(userId).snapshots().map((event) {
+      final json = event.data() as Map<String, dynamic>;
+      return types.User(
+          id: event.id,
+          firstName: json['firstName'],
+          imageUrl: json['imageUrl'],
+          metadata: {
+            'email': json['metadata']['email'],
+            'token': json['metadata']['token'],
+          });
+    });
+  }
 
   Future<Either<String, bool>> userLogin(
       {required String email, required String password}) async {
@@ -56,38 +76,32 @@ class AuthService {
       final token = await messaging.getToken();
       final response = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      chatCore.createUserInFirestore(
-        types.User(
+      chatCore.createUserInFirestore(types.User(
           id: response.user!.uid,
           firstName: userName,
           imageUrl: url,
           metadata: {
-            'email' : email,
-            'token' : token,
-          }
-
-        )
-      );
+            'email': email,
+            'token': token,
+          }));
       return const Right(true);
     } on FirebaseAuthException catch (err) {
       return left(err.message.toString());
     } on FirebaseException catch (err) {
-           return left(err.toString());
+      return left(err.toString());
     } catch (err) {
       return left(err.toString());
     }
   }
 
-  Future<Either<String , bool>> logOut() async {
-    try{
+  Future<Either<String, bool>> logOut() async {
+    try {
       await auth.signOut();
       return const Right(true);
-
     } on FirebaseAuthException catch (err) {
       return left(err.message.toString());
     } catch (err) {
       return left(err.toString());
     }
   }
-
 }
