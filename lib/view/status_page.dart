@@ -13,7 +13,7 @@ class StatusPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer(builder: (context, ref, child) {
-        final authData = ref.watch(userStream);
+        final authData = ref.watch(userOnline);
 
         return authData.when(
           data: (data) {

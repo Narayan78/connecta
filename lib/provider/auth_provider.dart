@@ -8,7 +8,7 @@ import '../service/auth_service.dart';
 
 
 
-final userStream = StreamProvider((ref) => ref.read(auth).authStateChanges());
+final userOnline = StreamProvider((ref) => ref.read(auth).authStateChanges());
 
 final authProvider = StateNotifierProvider<AuthProvider, CommonState>(
   (ref) => AuthProvider(

@@ -7,14 +7,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import '../firebase_instances.dart';
 
-// final usersStream =
-//     StreamProvider.autoDispose((ref) => ref.read(chatCore).users());
-// final singleUser =
-//     StreamProvider.family((ref, String id) => AuthService.getUser(id));
+final usersStream =
+    StreamProvider.autoDispose((ref) => ref.read(chatCore).users());
+
+final singleUser =
+    StreamProvider.family((ref, String id) => AuthService.getUser(id));
 
 final authServiceProvider = Provider((ref) => AuthService(
     auth: ref.watch(auth),
@@ -36,17 +38,19 @@ class AuthService {
   });
 
   static final userDb = FirebaseFirestore.instance.collection('users');
+
   static Stream<types.User> getUser(String userId) {
     return userDb.doc(userId).snapshots().map((event) {
       final json = event.data() as Map<String, dynamic>;
       return types.User(
-          id: event.id,
-          firstName: json['firstName'],
-          imageUrl: json['imageUrl'],
-          metadata: {
-            'email': json['metadata']['email'],
-            'token': json['metadata']['token'],
-          });
+        id: event.id,
+        firstName: json['firstName'],
+        metadata: {
+          'email': json['metadata']['email'],
+          'token': json['metadata']['token'],
+        },
+        imageUrl: json['imageUrl'],
+      );
     });
   }
 
@@ -55,6 +59,13 @@ class AuthService {
     try {
       final response = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+      final token = await messaging.getToken();
+      await userDb.doc(response.user!.uid).update({
+        'metadata': {
+          'token': token,
+          'email': email,
+        },
+      });
       return const Right(true);
     } on FirebaseAuthException catch (err) {
       return left(err.message.toString());
@@ -76,14 +87,16 @@ class AuthService {
       final token = await messaging.getToken();
       final response = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      chatCore.createUserInFirestore(types.User(
-          id: response.user!.uid,
-          firstName: userName,
-          imageUrl: url,
-          metadata: {
-            'email': email,
-            'token': token,
-          }));
+      chatCore.createUserInFirestore(
+        types.User(
+            id: response.user!.uid,
+            firstName: userName,
+            imageUrl: url,
+            metadata: {
+              'email': email,
+              'token': token,
+            }),
+      );
       return const Right(true);
     } on FirebaseAuthException catch (err) {
       return left(err.message.toString());
