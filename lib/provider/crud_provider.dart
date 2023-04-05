@@ -4,9 +4,8 @@ import 'package:connecta/service/crud_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-
-final crudProvider = StateNotifierProvider<CrudProvider , CommonState>((ref) => CrudProvider(CommonState.empty(), ref.watch(crudService)));
+final crudProvider = StateNotifierProvider<CrudProvider, CommonState>(
+    (ref) => CrudProvider(CommonState.empty(), ref.watch(crudService)));
 
 class CrudProvider extends StateNotifier<CommonState> {
   final CrudService service;

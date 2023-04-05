@@ -37,9 +37,10 @@ class AuthService {
     required this.storage,
   });
 
-  static final userDb = FirebaseFirestore.instance.collection('users');
 
-  static Stream<types.User> getUser(String userId) {
+
+  static final userDb = FirebaseFirestore.instance.collection('users');
+static Stream<types.User> getUser(String userId) {
     return userDb.doc(userId).snapshots().map((event) {
       final json = event.data() as Map<String, dynamic>;
       return types.User(

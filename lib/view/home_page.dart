@@ -2,8 +2,10 @@ import 'package:connecta/firebase_instances.dart';
 import 'package:connecta/provider/auth_provider.dart';
 import 'package:connecta/service/auth_service.dart';
 import 'package:connecta/service/crud_service.dart';
+import 'package:connecta/view/add_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -33,7 +35,6 @@ class HomePage extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     DrawerHeader(
-                      
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -60,6 +61,13 @@ class HomePage extends StatelessWidget {
                       thickness: 1,
                     ),
                     ListTile(
+                      title: const Text('add post'),
+                      leading: const Icon(Icons.post_add),
+                      onTap: () {
+                        Get.to(() => AddPage());
+                      },
+                    ),
+                    ListTile(
                         title: const Text('Sign Out'),
                         leading: const Icon(Icons.logout),
                         onTap: () {
@@ -77,11 +85,12 @@ class HomePage extends StatelessWidget {
             )),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(children: [
-            Container(
+          child: Column(
+            children: [
+              Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color:const Color.fromARGB(255, 236, 234, 234),
+                  color: const Color.fromARGB(255, 236, 234, 234),
                 ),
                 height: 120,
                 child: users.when(
@@ -110,8 +119,39 @@ class HomePage extends StatelessWidget {
                   error: (error, stackTrace) => Text(error.toString()),
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
-                ))
-          ]),
+                ),
+              ),
+              Expanded(
+                  child: posts.when(
+                      data: (data) {
+                        return Container(
+                          height: 150,
+                          child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                          
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color.fromARGB(255, 236, 234, 234),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(data[index].title),
+                                    Container(
+                                      child: Image.network(data[index].imageUrl , fit: BoxFit.cover,) ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      error: (error, stackTrace) => Text(error.toString()),
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator())))
+            ],
+          ),
         ),
       );
     });
