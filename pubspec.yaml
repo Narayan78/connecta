@@ -52,6 +52,7 @@ dependencies:
   freezed_annotation: ^2.2.0 
   fluttertoast: ^8.2.1
   email_validator: ^2.1.17
+  badges: ^3.1.1
 
 dev_dependencies:
   flutter_test:

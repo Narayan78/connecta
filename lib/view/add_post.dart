@@ -142,6 +142,7 @@ class AddPage extends ConsumerWidget {
                                   );
                             }
                           }
+                          Get.back();
                         },
                   child: const Text('Post'),
                 )

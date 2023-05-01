@@ -3,6 +3,7 @@ import 'package:connecta/provider/auth_provider.dart';
 import 'package:connecta/service/auth_service.dart';
 import 'package:connecta/service/crud_service.dart';
 import 'package:connecta/view/add_post.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,23 @@ class HomePage extends StatelessWidget {
       final posts = ref.watch(postStream);
       return Scaffold(
         appBar: AppBar(
+          actions: [
+            badge.Badge(
+              position:  badge.BadgePosition.topEnd(top: 0, end: 3),
+              showBadge: true,
+              badgeContent: const Text(
+                '5' ,
+                style:  TextStyle(color: Colors.black),
+              ),
+              child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.chat_bubble,
+                  )),
+            )
+          ],
           title: const Text(' Connecta'),
+          backgroundColor: Colors.grey[800],
         ),
         drawer: Drawer(
             elevation: 300,
@@ -84,7 +101,7 @@ class HomePage extends StatelessWidget {
               ),
             )),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             children: [
               Container(
@@ -129,19 +146,74 @@ class HomePage extends StatelessWidget {
                           child: ListView.builder(
                             itemCount: data.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                          
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color.fromARGB(255, 236, 234, 234),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Text(data[index].title),
-                                    Container(
-                                      child: Image.network(data[index].imageUrl , fit: BoxFit.cover,) ),
-                                  ],
-                                ),
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Row(
+                                      children: [
+                                        
+                                        CircleAvatar(
+                                          radius: 25,
+                                          backgroundImage:
+                                              NetworkImage(data[index].imageUrl),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          data[index].title,
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        const Spacer(),
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(Icons.more_horiz))
+                                      ],
+                                    ),
+                                  ),
+                                 
+                                  Padding(
+                                    padding: const EdgeInsets.only( left: 8.0, top: 5, bottom: 5),
+                                    child: Text(
+                                      data[index].detail,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      data[index].imageUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.thumb_up)),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.mode_comment_outlined,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.share)),
+                                    ],
+                                  ),
+                                  const Divider(
+                                    thickness: 2,
+                                  )
+                                ],
                               );
                             },
                           ),

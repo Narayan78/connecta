@@ -22,11 +22,7 @@ class Comment {
   final String comment;
 
   Comment(
-      {
-        required this.userName,
-        required this.userImage,
-        required this.comment
-      });
+      {required this.userName, required this.userImage, required this.comment});
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
